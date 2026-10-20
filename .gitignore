@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+
+# 実の認証情報（実体はプロジェクトのフォルダ直下の .env にある。スキルには .env.example だけを置く）
+.env
+*.env
+!.env.example
+
+# uv が作る隔離venv（スキル配布物ではない）
+.venv/

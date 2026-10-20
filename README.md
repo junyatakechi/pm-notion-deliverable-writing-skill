@@ -8,6 +8,7 @@ Claudeに頼むと、本文と未解決のコメントを読んでから構成�
 - [Claude Code](https://docs.claude.com/en/docs/claude-code/overview)
 - Claudeに接続した公式の [Notion MCP](https://developers.notion.com/docs/mcp)
 - NotionのDeliverableデータベース
+- Notionの文書の変更履歴データベース（列は [references/change-history.md](references/change-history.md)。`文書` の列でDeliverableとリレーションする）
 - 背景をLogへ移すときは [pm-notion-log-record-skill](https://github.com/junyatakechi/pm-notion-log-record-skill)
 
 ## インストール
@@ -27,9 +28,11 @@ git clone https://github.com/junyatakechi/pm-notion-deliverable-writing-skill.gi
 ```
 PM_DELIVERABLE_DB_URL=<DeliverableのURL>
 PM_DELIVERABLE_DATA_SOURCE_ID=<Deliverableのdata source ID>
+PM_DOC_HISTORY_DB_URL=<文書の変更履歴のURL>
+PM_DOC_HISTORY_DATA_SOURCE_ID=<文書の変更履歴のdata source ID>
 ```
 
-data source ID は、データベースのURLを渡してClaudeにNotion MCPで取得させると、`collection://` の後ろに表示される。`collection://` を除いた値を書く。既存のページを推敲するだけなら、この設定は無くても動く。
+data source ID は、データベースのURLを渡してClaudeにNotion MCPで取得させると、`collection://` の後ろに表示される。`collection://` を除いた値を書く。既存のページを推敲するだけなら、Deliverableの2つは無くても動く。変更履歴の2つは、判断が変わる書き替えをするときに要る。
 
 ## 使い方
 
@@ -37,7 +40,7 @@ Claudeに普段の言葉で頼むと、Claudeがこのスキルを読み込ん�
 
 | 頼み方 | Claudeがすること |
 |---|---|
-| 「この文書の構成を変えたい <URL>」「推敲したい」 | 本文とコメントを読み、構成案とLogへ移すものを、表にしてファイルで渡す。合意してから書き替え、読み直して確かめる |
+| 「この文書の構成を変えたい <URL>」「推敲したい」 | 本文・コメント・変更履歴を読み、構成案とLogへ移すもの・変更履歴に足す行を、表にしてファイルで渡す。合意してから書き替え、読み直して確かめてから変更履歴に行を足す |
 | 「この仕組みを設計書に書いて」 | 実ファイルを読んでから、仕組みと全文を貼る。具体的な名前は一般名詞に、秘密情報はプレースホルダにする |
 | 「具体的な名前を一般名詞にして」 | 既存の文書から具体的な名前や個人を特定できる記述を洗い出し、一般名詞やプレースホルダに置き換える |
 | 「非公開の文書なので具体的な名前で書いて」 | その文書では、具体的な名前のまま書く。秘密情報の実値は書かない |
@@ -49,5 +52,6 @@ Claudeに普段の言葉で頼むと、Claudeがこのスキルを読み込ん�
 - 非公開の文書だと指示されていないのに、具体的な名前で書くこと
 - 秘密情報の実値を本文に載せること
 - 文書と実物がずれたときに、黙って文書を実物に合わせること
+- 変更履歴の、足し終えた行を書き替えること（覆すときは新しい行を足す）
 
 手順・判断基準・落とし穴は [SKILL.md](SKILL.md) にある。
